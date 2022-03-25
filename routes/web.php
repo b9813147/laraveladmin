@@ -14,5 +14,21 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('app');
+    return view('layouts.app');
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//路由分組
+//Route::group(['prefix'=>'admin','namespace'=>'Admin'],function (){
+//
+//    //登入顯示 name給路由起一個別名
+//    Route::get('login','LoginController@index')->name('admin.login');
+//
+//    //登入方法 name給路由起一個別名
+//    Route::post('login','LoginController@login')->name('admin.login');
+//
+//    //定義圖形驗證碼路由
+//    Route::get('img_code','CommonController@imgCode')->name('admin.img_code');
+//});
