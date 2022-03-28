@@ -14,8 +14,8 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $all = User::all();
-        return view('admin.user', ['data' => $all]);
+        $users = User::all();
+        return view('admin.user', ['users' => $users]);
     }
 
     /**
@@ -36,7 +36,9 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->only('email', 'name', 'identity');
+        User::query()->create($request->all());
+
     }
 
     /**
@@ -70,7 +72,8 @@ class AdminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $only = $request->only('email', 'password', 'name');
+        User::query()->find($id)->update($only);
     }
 
     /**

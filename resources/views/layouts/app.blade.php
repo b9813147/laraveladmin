@@ -13,7 +13,7 @@
 <div id="app">
     <v-app id="inspire">
         @if(auth()->check())
-            <v-navigation-drawer class="blue lighten-5" mini-variant-width="70" width="250" light  v-model="drawer" app>
+            <v-navigation-drawer class="blue lighten-5" mini-variant-width="70" width="250" light v-model="drawer" app>
                 <v-list dense>
                     @include('layouts.sidebar')
                 </v-list>
@@ -24,8 +24,10 @@
         @endif
         <v-main>
             <v-container fluid>
-                <v-row align="center">
-                    @yield('content')
+                <v-row align="center" justify="center">
+                    <v-col col-12>
+                        @yield('content')
+                    </v-col>
                 </v-row>
 
             </v-container>
