@@ -1,32 +1,44 @@
-<v-list-item link>
-    <v-list-item-action>
-        <v-icon>mdi-view-dashboard</v-icon>
-    </v-list-item-action>
-    <v-list-item-content>
-        <v-list-item-title>儀表板</v-list-item-title>
-    </v-list-item-content>
-</v-list-item>
-<v-list-item link>
-    <v-list-item-action>
-        <v-icon>mdi-cogs</v-icon>
-    </v-list-item-action>
-    <v-list-item-content>
-        <v-list-item-title>會員管理系統</v-list-item-title>
-    </v-list-item-content>
-</v-list-item>
-<v-list-item link>
-    <v-list-item-action>
-        <v-icon>mdi-account</v-icon>
-    </v-list-item-action>
-    <v-list-item-content>
-        <v-list-item-title>
-            <a href="{{ url('/home') }}" style="text-decoration: none;color: black">
-                成員管理
-            </a>
-        </v-list-item-title>
-    </v-list-item-content>
-</v-list-item>
+<v-list class="pa-0">
+    <v-list-item tag="div">
+        <v-list-item-action>
+            <v-avatar>
+                <img max-width="2.5em" class="avatar" src="{{ url('images/logo.png') }}" alt="">
+            </v-avatar>
+        </v-list-item-action>
+        <v-list-item-content>
+            <v-list-item-title>Admin</v-list-item-title>
+        </v-list-item-content>
+        <v-spacer></v-spacer>
 
+        <v-list-item-action style="max-width:1em">
+            <v-menu bottom right offset-y origin="bottom right" transition="v-slide-y-transition">
+                <template v-slot:activator="{ on }">
+                    <v-btn icon small light slot="activator" v-on="on">
+                        <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
+                </template>
+                <v-list>
+                    <v-list-item v-for="item in userMenus" :key="item.title" value="true" @click="handleUserActions(item)">
+                        <v-list-item-content>
+                            <v-list-item-title v-text="item.title"></v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
+        </v-list-item-action>
+    </v-list-item>
+</v-list>
+
+<v-list>
+    <v-list-item v-for="item in appMenus" :key="item.text" link :href="item.href">
+        <v-list-item-action>
+            <v-icon>@{{ item.icon }}</v-icon>
+        </v-list-item-action>
+        <v-list-item-content>
+            <v-list-item-title>@{{ item.text }}</v-list-item-title>
+        </v-list-item-content>
+    </v-list-item>
+</v-list>
 {{--        <v-list-item link to="/group/channel">--}}
 {{--            <v-list-item-action>--}}
 {{--                <v-icon>mdi-library-video</v-icon>--}}
