@@ -1,12 +1,15 @@
 require('./bootstrap');
 import Vue     from "vue";
+import i18n    from './lang/index'
 import vuetify from './plugins/vuetify';
 
 Vue.component('login-component', require('./components/Login').default);
+Vue.component('user-component', require('./components/admin/User').default);
 
 const app = new Vue({
     el     : '#app',
     vuetify,
+    i18n,
     data   : () => ({
         drawer          : null,
         drawerRight     : false,
@@ -22,7 +25,7 @@ const app = new Vue({
         appMenus        : [
             // {icon: 'mdi-view-dashboard', text: '儀表版', href: '/'},
             // {icon: 'mdi-cogs', text: '系統設定', href: '/Settings'},
-            {icon: 'mdi-account', text: '成員管理', href: 'user'},
+            {icon: 'mdi-account', text: '成員管理', href: 'admin'},
         ]
     }),
     methods: {
@@ -44,4 +47,4 @@ const app = new Vue({
     }
 
 });
-window.vue = app;
+// window.vue = app;
