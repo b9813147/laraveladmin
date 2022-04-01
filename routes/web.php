@@ -20,9 +20,10 @@ Route::get('/', function () {
 
 Auth::routes();
 
-//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/refresh_captcha', [App\Http\Controllers\auth\LoginController::class, 'refresh_captcha'])->name('refresh_captcha');
-Route::resource('admin', AdminController::class);
+Route::group(['middleware' => 'auth:web'], function () {
+    Route::resource('admin', AdminController::class);
+});
 //路由分組
 //Route::group(['prefix'=>'admin','namespace'=>'Admin'],function (){
 //

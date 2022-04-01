@@ -17,16 +17,9 @@ const app = new Vue({
         logoutLoading   : false,
         changingPassword: false,
         updatingUser    : false,
-        langs           : [{text: '繁體', value: 'zh-TW'}, {text: 'English', value: 'en-US'}, {text: '简体', value: 'zh-CN'}],
-        userMenus       : [
-            {icon: 'bubble_chart', title: 'Logout', link: 'login'},
-            {icon: 'bubble_chart', title: 'Change Password', link: 'changepassword'}
-        ],
-        appMenus        : [
-            // {icon: 'mdi-view-dashboard', text: '儀表版', href: '/'},
-            // {icon: 'mdi-cogs', text: '系統設定', href: '/Settings'},
-            {icon: 'mdi-account', text: '成員管理', href: 'admin'},
-        ]
+        langs           : [],
+        userMenus       : [],
+        appMenus        : []
     }),
     methods: {
         async handleUserActions(item) {
@@ -42,8 +35,44 @@ const app = new Vue({
                     })
             }
             window.location.replace(item.link);
+        },
+        setLang(lang) {
+            // 設定後端語系
+            axios.get('/api/lang/setLocal', {
+                params: {
+                    lang: lang
+                }
+            }).then((resource) => {
+                if (resource.status === 200) {
+                    localStorage.setItem('local', lang);
+                }
+            });
+            return window.location = location.pathname;
+        },
+        async getLang() {
+            await axios.get('/api/lang/getLocal')
+                .then((resource) => {
+                    if (resource.status === 200) {
+                        localStorage.setItem('local', resource.data.lang)
+                        return this.$i18n.locale = resource.data.lang
+                    }
+                });
         }
-
+    },
+    mounted() {
+        this.appMenus = [
+            // {icon: 'mdi-view-dashboard', text: '儀表版', href: '/'},
+            // {icon: 'mdi-cogs', text: '系統設定', href: '/Settings'},
+            {icon: 'mdi-account', text: this.$t('users.manage'), href: 'admin'},
+        ];
+        this.langs = [
+            {text: '繁體', value: 'zh-TW'},
+            {text: 'English', value: 'en-US'},
+        ]
+        this.userMenus = [
+            {icon: 'bubble_chart', title: this.$t('common.logout'), link: 'login'},
+            {icon: 'bubble_chart', title: this.$t('common.reset_password'), link: 'changepassword'}
+        ];
     }
 
 });

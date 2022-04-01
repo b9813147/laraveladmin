@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -36,8 +37,9 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        $request->only('email', 'name', 'identity');
-        User::query()->create($request->all());
+        $only             = $request->only('email', 'name', 'identity', 'password');
+        $only['password'] = Hash::make($only['password']);
+        User::query()->create($only);
 
     }
 
@@ -72,7 +74,8 @@ class AdminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $only = $request->only('email', 'password', 'name');
+        $only             = $request->only('email', 'password', 'name', 'identity');
+        $only['password'] = Hash::make($only['password']);
         User::query()->find($id)->update($only);
     }
 

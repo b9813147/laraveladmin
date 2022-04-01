@@ -5464,7 +5464,7 @@ __webpack_require__.r(__webpack_exports__);
       };
       axios.post('login', form_data).then(function (response) {
         if (response.status === 204) {
-          window.location.replace('/');
+          window.location.replace('/admin');
         }
       })["catch"](function (error) {
         var result = error.response.data.errors;
@@ -5574,6 +5574,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['users'],
   data: function data() {
@@ -5582,26 +5590,23 @@ __webpack_require__.r(__webpack_exports__);
       valid: true,
       search: '',
       headers: [],
-      duty: [],
-      status: [],
+      identities: [],
       resources: [],
       stats: [],
       editedIndex: -1,
       editedItem: {
-        group_name: null,
-        habook: null,
-        // member_duty  : {text: this.$t('general'), value: 'General'},
-        // member_status: {text: this.$t('enable'), value: 1},
-        groupId: null,
-        userId: null
+        id: null,
+        name: null,
+        identity: null,
+        password: null // userId : null
+
       },
       defaultItem: {
-        group_name: null,
-        habook: null,
-        // member_duty  : {text: this.$t('general'), value: 'General'},
-        // member_status: {text: this.$t('enable'), value: 1},
-        groupId: null,
-        userId: null
+        id: null,
+        name: null,
+        identity: null,
+        password: null // userId : null
+
       },
       success: [],
       error: [],
@@ -5610,8 +5615,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     formTitle: function formTitle() {
-      // return this.editedIndex === -1 ? this.$t('create_user') : this.$t('editor_user')
-      return this.editedIndex === -1 ? '新增使用者' : '編輯使用者';
+      return this.editedIndex === -1 ? this.$t('users.create') : this.$t('users.edit'); // return this.editedIndex === -1 ? '新增使用者' : '編輯使用者'
     }
   },
   watch: {
@@ -5679,47 +5683,36 @@ __webpack_require__.r(__webpack_exports__);
     //     _this.defaultColumns();
     // },
     defaultColumns: function defaultColumns() {
-      var harder = [// {text: this.$t('channel_name'), value: 'group_name', align: 'left', sortable: false},
-      {
-        text: '使用者名稱',
+      var harder = [{
+        text: this.$t('users.name'),
         value: 'name',
         sortable: true
-      }, // {text: this.$t('team_model_id'), value: 'habook', sortable: true},
-      {
-        text: '身份',
+      }, {
+        text: this.$t('users.identity'),
         value: 'identity',
         sortable: true
       }, {
-        text: 'Email',
+        text: this.$t('users.email'),
         value: 'email',
         sortable: true
       }, {
-        text: '操作',
+        text: this.$t('common.action'),
         value: 'action',
         sortable: false
       }];
-      var duty = [{
-        text: 'Admin',
-        value: 'Admin'
-      }, // {text: this.$t('expert'), value: 'Expert'},
-      {
-        text: 'general',
-        value: 'General'
-      }];
-      var status = [{
-        text: this.$t('enable'),
+      var identities = [{
+        text: this.$t('users.admin'),
         value: 1
       }, {
-        text: this.$t('disable'),
-        value: 0
+        text: this.$t('users.general'),
+        value: 2
       }];
-      this.headers = harder; // this.duty = duty;
-      // this.status = status;
+      this.headers = harder;
+      this.identities = identities;
     },
     editItem: function editItem(item) {
       this.editedIndex = this.resources.indexOf(item);
       this.editedItem = Object.assign({}, item);
-      this.isSuccess = false;
       this.dialog = true;
     },
     deleteItem: function deleteItem(item) {
@@ -5745,21 +5738,11 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       this.dialog = false;
-      this.isSuccess = true;
       this.error = null;
       setTimeout(function () {
         _this2.editedItem = Object.assign({}, _this2.defaultItem);
-        _this2.qrcode = Object.assign({}, {
-          url: '',
-          dialog: false,
-          date: {
-            min: 0,
-            sec: 0,
-            timestamp: 0
-          }
-        });
         _this2.editedIndex = -1;
-      }, 300);
+      }, 1);
     },
     save: function save() {
       var _this3 = this;
@@ -5767,33 +5750,26 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       if (this.editedIndex > -1) {
-        // 編輯
-        var url = "/api/group/member/".concat(this.editedItem.userId); // 格式轉換
+        var url = "/admin/".concat(_this.editedItem.id); // 格式轉換
 
         var obj = {
-          member_duty: this.editedItem.member_duty.value,
-          member_status: 1
+          identity: _.isObject(_this.editedItem.identity) ? _this.editedItem.identity.value : _this.editedItem.identity
         }; // 合併修改
 
         var data = Object.assign({}, this.editedItem, obj);
-
-        _this.$store.dispatch("updateLoading", true);
+        console.log(data); // _this.$store.dispatch("updateLoading", true);
 
         axios.put(url, data).then(function (response) {
           if (response.status === 204) {
-            _this.$store.dispatch("updateLoading", false);
-
-            Object.assign(_this3.resources[_this3.editedIndex], _this3.editedItem);
-
-            _this.$store.dispatch("updateAlert", true);
+            // _this.$store.dispatch("updateLoading", false);
+            Object.assign(_this3.resources[_this3.editedIndex], _this3.editedItem); // _this.$store.dispatch("updateAlert", true);
 
             return _this3.close();
           }
         });
       } else {
-        _this.$store.dispatch("updateLoading", true); // 新增 格式轉換
-
-
+        // _this.$store.dispatch("updateLoading", true);
+        // 新增 格式轉換
         var _obj = {
           member_duty: this.editedItem.member_duty.value,
           member_status: 1
@@ -5801,20 +5777,18 @@ __webpack_require__.r(__webpack_exports__);
 
         var _data = Object.assign({}, this.editedItem, _obj);
 
-        var _url = "/api/group/member";
-        axios.post(_url, _data).then(function (response) {
-          if (response.status === 201 || response.status === 200) {
-            _this3.initialize();
-
-            _this.$store.dispatch("updateLoading", false);
-
-            return _this3.close();
-          }
-        })["catch"](function (error) {
-          _this.error = error.response.data.message;
-
-          _this.$store.dispatch("updateLoading", false);
-        });
+        var _url = "/api/group/member"; // axios.post(url, data)
+        //     .then((response) => {
+        //         if (response.status === 201 || response.status === 200) {
+        //             this.initialize()
+        //             _this.$store.dispatch("updateLoading", false);
+        //             return this.close()
+        //         }
+        //     }).catch((error) => {
+        //     _this.error = error.response.data.message;
+        //     _this.$store.dispatch("updateLoading", false);
+        //
+        // });
       }
     }
   },
@@ -5867,32 +5841,9 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_3__["default"]({
       logoutLoading: false,
       changingPassword: false,
       updatingUser: false,
-      langs: [{
-        text: '繁體',
-        value: 'zh-TW'
-      }, {
-        text: 'English',
-        value: 'en-US'
-      }, {
-        text: '简体',
-        value: 'zh-CN'
-      }],
-      userMenus: [{
-        icon: 'bubble_chart',
-        title: 'Logout',
-        link: 'login'
-      }, {
-        icon: 'bubble_chart',
-        title: 'Change Password',
-        link: 'changepassword'
-      }],
-      appMenus: [// {icon: 'mdi-view-dashboard', text: '儀表版', href: '/'},
-      // {icon: 'mdi-cogs', text: '系統設定', href: '/Settings'},
-      {
-        icon: 'mdi-account',
-        text: '成員管理',
-        href: 'admin'
-      }]
+      langs: [],
+      userMenus: [],
+      appMenus: []
     };
   },
   methods: {
@@ -5928,7 +5879,69 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_3__["default"]({
           }
         }, _callee);
       }))();
+    },
+    setLang: function setLang(lang) {
+      // 設定後端語系
+      axios.get('/api/lang/setLocal', {
+        params: {
+          lang: lang
+        }
+      }).then(function (resource) {
+        if (resource.status === 200) {
+          localStorage.setItem('local', lang);
+        }
+      });
+      return window.location = location.pathname;
+    },
+    getLang: function getLang() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return axios.get('/api/lang/getLocal').then(function (resource) {
+                  if (resource.status === 200) {
+                    localStorage.setItem('local', resource.data.lang);
+                    return _this2.$i18n.locale = resource.data.lang;
+                  }
+                });
+
+              case 2:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
     }
+  },
+  mounted: function mounted() {
+    this.appMenus = [// {icon: 'mdi-view-dashboard', text: '儀表版', href: '/'},
+    // {icon: 'mdi-cogs', text: '系統設定', href: '/Settings'},
+    {
+      icon: 'mdi-account',
+      text: this.$t('users.manage'),
+      href: 'admin'
+    }];
+    this.langs = [{
+      text: '繁體',
+      value: 'zh-TW'
+    }, {
+      text: 'English',
+      value: 'en-US'
+    }];
+    this.userMenus = [{
+      icon: 'bubble_chart',
+      title: this.$t('common.logout'),
+      link: 'login'
+    }, {
+      icon: 'bubble_chart',
+      title: this.$t('common.reset_password'),
+      link: 'changepassword'
+    }];
   }
 }); // window.vue = app;
 
@@ -5988,7 +6001,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  common: {
+    'cancel': 'cancel',
+    'submit': 'submit',
+    'action': 'action',
+    'password': 'password',
+    'rows_per_page': 'Rows per page',
+    'all': 'All'
+  },
+  users: {
+    'manage': 'manage',
+    'edit': 'edit',
+    'create': 'create',
+    'delete': 'delete',
+    'identity': 'identity',
+    'email': 'email',
+    'name': 'name',
+    'admin': 'admin',
+    'general': 'general'
+  }
+});
 
 /***/ }),
 
@@ -6005,8 +6038,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var vue_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-i18n */ "./node_modules/vue-i18n/dist/vue-i18n.esm.js");
-/* harmony import */ var _zh_Tw__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./zh-Tw */ "./resources/js/lang/zh-Tw.js");
-/* harmony import */ var _en_Us__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./en-Us */ "./resources/js/lang/en-Us.js");
+/* harmony import */ var _zh_Tw_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./zh-Tw.js */ "./resources/js/lang/zh-Tw.js");
+/* harmony import */ var _en_Us_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./en-Us.js */ "./resources/js/lang/en-Us.js");
 
 
 
@@ -6025,14 +6058,14 @@ if (!localStorage.getItem('local')) {
       localStorage.setItem('local', 'zh-TW');
       break;
   }
-} // console.log(localStorage.getItem('local'));
+}
 
+console.log(localStorage.getItem('local'));
 /*todo 自動偵測多語系 */
 
-
 var messages = {
-  "zh-TW": _zh_Tw__WEBPACK_IMPORTED_MODULE_0__["default"],
-  "en-US": _en_Us__WEBPACK_IMPORTED_MODULE_1__["default"]
+  "zh-TW": _zh_Tw_js__WEBPACK_IMPORTED_MODULE_0__["default"],
+  "en-US": _en_Us_js__WEBPACK_IMPORTED_MODULE_1__["default"]
 };
 var i18n = new vue_i18n__WEBPACK_IMPORTED_MODULE_3__["default"]({
   locale: localStorage.getItem('local'),
@@ -6053,7 +6086,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  common: {
+    'cancel': '取消',
+    'submit': '送出',
+    'action': '操作',
+    'password': '密碼',
+    'logout': '登出',
+    'reset_password': '更改密碼',
+    'rows_per_page': '每頁行數',
+    'all': '全部'
+  },
+  users: {
+    'manage': '人員管理',
+    'edit': '編輯人員',
+    'create': '新增人員',
+    'delete': '刪除人員',
+    'identity': '身份',
+    'email': '信箱',
+    'name': '名稱',
+    'admin': '管理員',
+    'general': '成員'
+  }
+});
 
 /***/ }),
 
@@ -32606,7 +32661,23 @@ var render = function () {
                             "v-btn",
                             {
                               attrs: { color: "primary" },
-                              on: { click: _vm.login },
+                              on: {
+                                click: _vm.login,
+                                keydown: function ($event) {
+                                  if (
+                                    !$event.type.indexOf("key") &&
+                                    _vm._k(
+                                      $event.keyCode,
+                                      "enter",
+                                      13,
+                                      $event.key,
+                                      "Enter"
+                                    )
+                                  ) {
+                                    return null
+                                  }
+                                },
+                              },
                             },
                             [_vm._v("Login")]
                           ),
@@ -32683,6 +32754,10 @@ var render = function () {
           headers: _vm.headers,
           items: _vm.resources,
           search: _vm.search,
+          "footer-props": {
+            "items-per-page-text": _vm.$t("common.rows_per_page"),
+            "items-per-page-options": [5, 10, 15, _vm.$t("common.all")],
+          },
         },
         scopedSlots: _vm._u([
           {
@@ -32693,7 +32768,9 @@ var render = function () {
                   "v-toolbar",
                   { attrs: { flat: "", color: "white" } },
                   [
-                    _c("v-toolbar-title", [_vm._v("人員管理")]),
+                    _c("v-toolbar-title", [
+                      _vm._v(_vm._s(_vm.$t("users.manage"))),
+                    ]),
                     _vm._v(" "),
                     _c("v-divider", {
                       staticClass: "mx-4",
@@ -32705,7 +32782,7 @@ var render = function () {
                     _c(
                       "v-dialog",
                       {
-                        attrs: { "max-width": "500px" },
+                        attrs: { "max-width": "600px" },
                         scopedSlots: _vm._u([
                           {
                             key: "activator",
@@ -32766,17 +32843,19 @@ var render = function () {
                                           },
                                           [
                                             _c("v-text-field", {
-                                              attrs: { label: "名稱" },
+                                              attrs: {
+                                                label: _vm.$t("users.name"),
+                                              },
                                               model: {
-                                                value: _vm.defaultItem.name,
+                                                value: _vm.editedItem.name,
                                                 callback: function ($$v) {
                                                   _vm.$set(
-                                                    _vm.defaultItem,
+                                                    _vm.editedItem,
                                                     "name",
                                                     $$v
                                                   )
                                                 },
-                                                expression: "defaultItem.name",
+                                                expression: "editedItem.name",
                                               },
                                             }),
                                           ],
@@ -32794,17 +32873,52 @@ var render = function () {
                                           },
                                           [
                                             _c("v-text-field", {
-                                              attrs: { label: "信箱" },
+                                              attrs: {
+                                                label: _vm.$t("users.email"),
+                                              },
                                               model: {
-                                                value: _vm.defaultItem.email,
+                                                value: _vm.editedItem.email,
                                                 callback: function ($$v) {
                                                   _vm.$set(
-                                                    _vm.defaultItem,
+                                                    _vm.editedItem,
                                                     "email",
                                                     $$v
                                                   )
                                                 },
-                                                expression: "defaultItem.email",
+                                                expression: "editedItem.email",
+                                              },
+                                            }),
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-col",
+                                          {
+                                            attrs: {
+                                              cols: "12",
+                                              sm: "6",
+                                              md: "6",
+                                            },
+                                          },
+                                          [
+                                            _c("v-text-field", {
+                                              attrs: {
+                                                label:
+                                                  _vm.$t("common.password"),
+                                                type: "password",
+                                              },
+                                              model: {
+                                                value: _vm.editedItem.password,
+                                                callback: function ($$v) {
+                                                  _vm.$set(
+                                                    _vm.editedItem,
+                                                    "password",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression:
+                                                  "editedItem.password",
                                               },
                                             }),
                                           ],
@@ -32823,10 +32937,10 @@ var render = function () {
                                           [
                                             _c("v-select", {
                                               attrs: {
-                                                items: _vm.duty,
+                                                items: _vm.identities,
                                                 "item-text": "text",
                                                 "item-value": "value",
-                                                label: "身份",
+                                                label: _vm.$t("users.identity"),
                                                 "return-object": "",
                                                 required: "",
                                               },
@@ -32867,7 +32981,7 @@ var render = function () {
                                     attrs: { color: "blue darken-1", text: "" },
                                     on: { click: _vm.close },
                                   },
-                                  [_vm._v("取消")]
+                                  [_vm._v(_vm._s(_vm.$t("common.cancel")))]
                                 ),
                                 _vm._v(" "),
                                 _c(
@@ -32876,7 +32990,7 @@ var render = function () {
                                     attrs: { color: "blue darken-1", text: "" },
                                     on: { click: _vm.save },
                                   },
-                                  [_vm._v("送出")]
+                                  [_vm._v(_vm._s(_vm.$t("common.submit")))]
                                 ),
                               ],
                               1

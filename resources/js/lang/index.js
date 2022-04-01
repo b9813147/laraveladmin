@@ -1,7 +1,7 @@
 import Vue     from 'vue'
 import VueI18n from 'vue-i18n'
-import TW      from './zh-Tw'
-import EN      from './en-Us'
+import TW      from './zh-Tw.js'
+import EN      from './en-Us.js'
 
 Vue.use(VueI18n);
 
@@ -19,7 +19,7 @@ if (!localStorage.getItem('local')) {
     }
 }
 
-// console.log(localStorage.getItem('local'));
+console.log(localStorage.getItem('local'));
 
 /*todo 自動偵測多語系 */
 const messages = {

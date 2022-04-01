@@ -2,7 +2,7 @@
     <v-main class="my-15">
         <v-container fluid fill-height>
             <v-row justify="center">
-                <v-col xs="12" sm="8" md="5" >
+                <v-col xs="12" sm="8" md="5">
                     <v-card class="elevation-12">
                         <v-toolbar dark color="primary">
                             <v-toolbar-title>DMP 登入</v-toolbar-title>
@@ -45,7 +45,7 @@
                         </v-card-text>
                         <v-card-actions>
                             <v-spacer></v-spacer>
-                            <v-btn color="primary" @click="login">Login</v-btn>
+                            <v-btn color="primary" @click="login" @keydown.enter>Login</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-col>
@@ -83,7 +83,7 @@ export default {
             axios.post('login', form_data)
                 .then((response) => {
                     if (response.status === 204) {
-                        window.location.replace('/');
+                        window.location.replace('/admin');
                     }
                 })
                 .catch((error) => {

@@ -14,10 +14,14 @@
             :items="resources"
             :search="search"
             class="elevation-1"
+            :footer-props="{
+               'items-per-page-text':$t('common.rows_per_page'),
+               'items-per-page-options':[5,10,15,$t('common.all')]
+            }"
         >
             <template v-slot:top>
                 <v-toolbar flat color="white">
-                    <v-toolbar-title>人員管理</v-toolbar-title>
+                    <v-toolbar-title>{{ $t('users.manage') }}</v-toolbar-title>
                     <v-divider
                         class="mx-4"
                         inset
@@ -25,7 +29,7 @@
                     />
                     <v-spacer/>
                     <!-- Create user  -->
-                    <v-dialog v-model="dialog" max-width="500px">
+                    <v-dialog v-model="dialog" max-width="600px">
                         <template v-slot:activator="{ on }">
                             <v-btn color="primary" dark class="mx-2" v-on="on"> +</v-btn>
                         </template>
@@ -37,28 +41,24 @@
                                 <v-container>
                                     <v-row>
                                         <v-col cols="12" sm="6" md="6">
-                                            <v-text-field v-model="defaultItem.name" label="名稱"/>
+                                            <v-text-field v-model="editedItem.name" :label="$t('users.name')"/>
                                         </v-col>
                                         <v-col cols="12" sm="6" md="6">
-                                            <v-text-field v-model="defaultItem.email" label="信箱"/>
+                                            <v-text-field v-model="editedItem.email" :label="$t('users.email')"/>
                                         </v-col>
                                         <v-col cols="12" sm="6" md="6">
-                                            <v-select :items="duty" item-text="text" item-value="value" label="身份" v-model="editedItem.identity" return-object required/>
+                                            <v-text-field v-model="editedItem.password" :label="$t('common.password')" type="password"/>
                                         </v-col>
-                                        <!--                                        <v-col cols="12" sm="6" md="6">-->
-                                        <!--                                            <v-text-field v-model="editedItem.habook" :label="$t('team_model_id')" v-if="editedIndex >= 0" disabled/>-->
-                                        <!--                                            <v-textarea v-model="editedItem.habook" :error-messages="error" :label="$t('team_model_id')" v-else/>-->
-                                        <!--                                        </v-col>-->
-                                        <!--                                        <v-col cols="12" sm="6" md="6">-->
-                                        <!--                                            <v-select :items="status" item-text="text" item-value="value" :label="$t('status')" :rules="statusRules" v-model="editedItem.member_status" return-object required/>-->
-                                        <!--                                        </v-col>-->
+                                        <v-col cols="12" sm="6" md="6">
+                                            <v-select :items="identities" item-text="text" item-value="value" :label="$t('users.identity')" v-model="editedItem.identity" return-object required/>
+                                        </v-col>
                                     </v-row>
                                 </v-container>
                             </v-card-text>
                             <v-card-actions>
                                 <v-spacer/>
-                                <v-btn color="blue darken-1" text @click="close">取消</v-btn>
-                                <v-btn color="blue darken-1" text @click="save">送出</v-btn>
+                                <v-btn color="blue darken-1" text @click="close">{{ $t('common.cancel') }}</v-btn>
+                                <v-btn color="blue darken-1" text @click="save">{{ $t('common.submit') }}</v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
@@ -77,6 +77,14 @@
             <!--            <template v-slot:item.member_status="{ item }">-->
             <!--                {{ item.member_status.text }}-->
             <!--            </template>-->
+            <!--            <template v-slot:footer="{ pagination, options, updateOptions }">-->
+            <!--                <v-data-footer-->
+            <!--                    :pagination="pagination"-->
+            <!--                    :options="options"-->
+            <!--                    @update:options="updateOptions"-->
+            <!--                    -->
+            <!--                />-->
+            <!--            </template>-->
         </v-data-table>
 
     </v-card>
@@ -92,26 +100,21 @@ export default {
             valid      : true,
             search     : '',
             headers    : [],
-            duty       : [],
-            status     : [],
+            identities : [],
             resources  : [],
             stats      : [],
             editedIndex: -1,
             editedItem : {
-                group_name: null,
-                habook    : null,
-                // member_duty  : {text: this.$t('general'), value: 'General'},
-                // member_status: {text: this.$t('enable'), value: 1},
-                groupId: null,
-                userId : null
+                id      : null,
+                name    : null,
+                identity: null,
+                password: null                // userId : null
             },
             defaultItem: {
-                group_name: null,
-                habook    : null,
-                // member_duty  : {text: this.$t('general'), value: 'General'},
-                // member_status: {text: this.$t('enable'), value: 1},
-                groupId: null,
-                userId : null
+                id      : null,
+                name    : null,
+                identity: null,
+                password: null                // userId : null
             },
             success    : [],
             error      : [],
@@ -120,8 +123,8 @@ export default {
     },
     computed: {
         formTitle() {
-            // return this.editedIndex === -1 ? this.$t('create_user') : this.$t('editor_user')
-            return this.editedIndex === -1 ? '新增使用者' : '編輯使用者'
+            return this.editedIndex === -1 ? this.$t('users.create') : this.$t('users.edit')
+            // return this.editedIndex === -1 ? '新增使用者' : '編輯使用者'
         },
     },
     watch   : {
@@ -191,32 +194,22 @@ export default {
         // },
         defaultColumns() {
             const harder = [
-                // {text: this.$t('channel_name'), value: 'group_name', align: 'left', sortable: false},
-                {text: '使用者名稱', value: 'name', sortable: true},
-                // {text: this.$t('team_model_id'), value: 'habook', sortable: true},
-                {text: '身份', value: 'identity', sortable: true},
-                {text: 'Email', value: 'email', sortable: true},
-                {text: '操作', value: 'action', sortable: false}
+                {text: this.$t('users.name'), value: 'name', sortable: true},
+                {text: this.$t('users.identity'), value: 'identity', sortable: true},
+                {text: this.$t('users.email'), value: 'email', sortable: true},
+                {text: this.$t('common.action'), value: 'action', sortable: false}
             ];
-
-            const duty = [
-                {text: 'Admin', value: 'Admin'},
-                // {text: this.$t('expert'), value: 'Expert'},
-                {text: 'general', value: 'General'}
-            ];
-            const status = [
-                {text: this.$t('enable'), value: 1},
-                {text: this.$t('disable'), value: 0}
+            const identities = [
+                {text: this.$t('users.admin'), value: 1},
+                {text: this.$t('users.general'), value: 2}
             ];
 
             this.headers = harder;
-            // this.duty = duty;
-            // this.status = status;
+            this.identities = identities;
         },
         editItem(item) {
             this.editedIndex = this.resources.indexOf(item);
             this.editedItem = Object.assign({}, item);
-            this.isSuccess = false;
             this.dialog = true;
         },
         deleteItem(item) {
@@ -235,45 +228,34 @@ export default {
         },
         close() {
             this.dialog = false;
-            this.isSuccess = true;
             this.error = null;
             setTimeout(() => {
                 this.editedItem = Object.assign({}, this.defaultItem);
-                this.qrcode = Object.assign({}, {
-                    url   : '',
-                    dialog: false,
-                    date  : {
-                        min      : 0,
-                        sec      : 0,
-                        timestamp: 0
-                    }
-                })
                 this.editedIndex = -1
-            }, 300)
+            }, 1)
         },
         save() {
             let _this = this;
             if (this.editedIndex > -1) {
-                // 編輯
-                let url = `/api/group/member/${this.editedItem.userId}`;
+                let url = `/admin/${_this.editedItem.id}`
                 // 格式轉換
                 const obj = {
-                    member_duty  : this.editedItem.member_duty.value,
-                    member_status: 1
+                    identity: _.isObject(_this.editedItem.identity) ? _this.editedItem.identity.value : _this.editedItem.identity,
                 };
                 // 合併修改
                 const data = Object.assign({}, this.editedItem, obj);
-                _this.$store.dispatch("updateLoading", true);
+                console.log(data);
+                // _this.$store.dispatch("updateLoading", true);
                 axios.put(url, data).then((response) => {
                     if (response.status === 204) {
-                        _this.$store.dispatch("updateLoading", false);
+                        // _this.$store.dispatch("updateLoading", false);
                         Object.assign(this.resources[this.editedIndex], this.editedItem);
-                        _this.$store.dispatch("updateAlert", true);
+                        // _this.$store.dispatch("updateAlert", true);
                         return this.close()
                     }
                 })
             } else {
-                _this.$store.dispatch("updateLoading", true);
+                // _this.$store.dispatch("updateLoading", true);
                 // 新增 格式轉換
                 const obj = {
                     member_duty  : this.editedItem.member_duty.value,
@@ -282,18 +264,18 @@ export default {
                 // 合併修改
                 const data = Object.assign({}, this.editedItem, obj);
                 let url = `/api/group/member`;
-                axios.post(url, data)
-                    .then((response) => {
-                        if (response.status === 201 || response.status === 200) {
-                            this.initialize()
-                            _this.$store.dispatch("updateLoading", false);
-                            return this.close()
-                        }
-                    }).catch((error) => {
-                    _this.error = error.response.data.message;
-                    _this.$store.dispatch("updateLoading", false);
-
-                });
+                // axios.post(url, data)
+                //     .then((response) => {
+                //         if (response.status === 201 || response.status === 200) {
+                //             this.initialize()
+                //             _this.$store.dispatch("updateLoading", false);
+                //             return this.close()
+                //         }
+                //     }).catch((error) => {
+                //     _this.error = error.response.data.message;
+                //     _this.$store.dispatch("updateLoading", false);
+                //
+                // });
             }
         },
 
