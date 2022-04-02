@@ -87,10 +87,15 @@ export default {
                     }
                 })
                 .catch((error) => {
-                    let result = error.response.data.errors
-                    this.errors_message = result
+                    let result = error.response
+                    this.errors_message = result.data.errors
+                    if (result.status === 422) {
+                        this.refresh_captcha();
+                        console.log(1)
+                    }
+
                 })
-        }
+        },
     },
     mounted() {
         this.refresh_captcha();

@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//auth()->logout();
 Route::get('/', function () {
     return view('layouts.app');
 });

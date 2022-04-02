@@ -5467,8 +5467,14 @@ __webpack_require__.r(__webpack_exports__);
           window.location.replace('/admin');
         }
       })["catch"](function (error) {
-        var result = error.response.data.errors;
-        _this2.errors_message = result;
+        var result = error.response;
+        _this2.errors_message = result.data.errors;
+
+        if (result.status === 422) {
+          _this2.refresh_captcha();
+
+          console.log(1);
+        }
       });
     }
   },
@@ -5848,31 +5854,31 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_3__["default"]({
   },
   methods: {
     handleUserActions: function handleUserActions(item) {
-      var _this = this;
-
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _this.menuItem = item.title;
+                // this.menuItem = item.title;
+                console.log(item);
 
-                if (!(item.title === 'Logout')) {
+                if (!(item.link === 'logout')) {
                   _context.next = 4;
                   break;
                 }
 
                 _context.next = 4;
                 return axios.post('logout').then(function (response) {
-                  console.log(response); // window.location.replace(item.link);
+                  if (response.status === 204) {
+                    window.location.replace('login');
+                  }
+
+                  console.log(response);
                 })["catch"](function (error) {
                   console.log(error.response);
                 });
 
               case 4:
-                window.location.replace(item.link);
-
-              case 5:
               case "end":
                 return _context.stop();
             }
@@ -5894,7 +5900,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_3__["default"]({
       return window.location = location.pathname;
     },
     getLang: function getLang() {
-      var _this2 = this;
+      var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
@@ -5905,7 +5911,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_3__["default"]({
                 return axios.get('/api/lang/getLocal').then(function (resource) {
                   if (resource.status === 200) {
                     localStorage.setItem('local', resource.data.lang);
-                    return _this2.$i18n.locale = resource.data.lang;
+                    return _this.$i18n.locale = resource.data.lang;
                   }
                 });
 
@@ -5936,7 +5942,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_3__["default"]({
     this.userMenus = [{
       icon: 'bubble_chart',
       title: this.$t('common.logout'),
-      link: 'login'
+      link: 'logout'
     }, {
       icon: 'bubble_chart',
       title: this.$t('common.reset_password'),

@@ -23,18 +23,20 @@ const app = new Vue({
     }),
     methods: {
         async handleUserActions(item) {
-            this.menuItem = item.title;
-            if (item.title === 'Logout') {
+            // this.menuItem = item.title;
+            console.log(item)
+            if (item.link === 'logout') {
                 await axios.post('logout')
                     .then((response) => {
+                        if (response.status === 204) {
+                            window.location.replace('login');
+                        }
                         console.log(response);
-                        // window.location.replace(item.link);
                     })
                     .catch((error) => {
                         console.log(error.response);
                     })
             }
-            window.location.replace(item.link);
         },
         setLang(lang) {
             // 設定後端語系
@@ -70,7 +72,7 @@ const app = new Vue({
             {text: 'English', value: 'en-US'},
         ]
         this.userMenus = [
-            {icon: 'bubble_chart', title: this.$t('common.logout'), link: 'login'},
+            {icon: 'bubble_chart', title: this.$t('common.logout'), link: 'logout'},
             {icon: 'bubble_chart', title: this.$t('common.reset_password'), link: 'changepassword'}
         ];
     }
