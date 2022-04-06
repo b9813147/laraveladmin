@@ -244,7 +244,6 @@ export default {
                 };
                 // 合併修改
                 const data = Object.assign({}, this.editedItem, obj);
-                console.log(data);
                 // _this.$store.dispatch("updateLoading", true);
                 axios.put(url, data).then((response) => {
                     if (response.status === 204) {
@@ -258,24 +257,23 @@ export default {
                 // _this.$store.dispatch("updateLoading", true);
                 // 新增 格式轉換
                 const obj = {
-                    member_duty  : this.editedItem.member_duty.value,
-                    member_status: 1
+                    identity: _.isObject(_this.editedItem.identity) ? _this.editedItem.identity.value : _this.editedItem.identity,
                 };
                 // 合併修改
                 const data = Object.assign({}, this.editedItem, obj);
-                let url = `/api/group/member`;
-                // axios.post(url, data)
-                //     .then((response) => {
-                //         if (response.status === 201 || response.status === 200) {
-                //             this.initialize()
-                //             _this.$store.dispatch("updateLoading", false);
-                //             return this.close()
-                //         }
-                //     }).catch((error) => {
-                //     _this.error = error.response.data.message;
-                //     _this.$store.dispatch("updateLoading", false);
-                //
-                // });
+                let url = `/admin`
+                axios.post(url, data)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            this.resources.push(response.data)
+                            // _this.$store.dispatch("updateLoading", false);
+                            return this.close()
+                        }
+                    }).catch((error) => {
+                    _this.error = error.response.data.message;
+                    // _this.$store.dispatch("updateLoading", false);
+
+                });
             }
         },
 

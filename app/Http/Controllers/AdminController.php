@@ -2,12 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
+    protected UserService $userService;
+
+    /**
+     * @param UserService $userService
+     */
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +25,7 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = $this->userService->all();
         return view('admin.user', ['users' => $users]);
     }
 
@@ -33,14 +43,20 @@ class AdminController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
         $only             = $request->only('email', 'name', 'identity', 'password');
         $only['password'] = Hash::make($only['password']);
-        User::query()->create($only);
 
+        try {
+            $result = $this->userService->create($only);
+        } catch (\Exception $exception) {
+            return response()->json($exception->getMessage(), 404);
+        }
+
+        return response()->json($result, 200);
     }
 
     /**
@@ -70,13 +86,20 @@ class AdminController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $id)
     {
         $only             = $request->only('email', 'password', 'name', 'identity');
         $only['password'] = Hash::make($only['password']);
-        User::query()->find($id)->update($only);
+
+        try {
+            $this->userService->update($id, $only);
+        } catch (\Exception $exception) {
+            return response()->json($exception->getMessage(), 404);
+        }
+
+        return response()->json(null, 204);
     }
 
     /**

@@ -13,11 +13,7 @@
 <div id="app">
     <v-app id="inspire">
         @if(auth()->check())
-            <v-navigation-drawer class="blue lighten-5" mini-variant-width="70" width="250" light v-model="drawer" app>
-                <v-list dense>
-                    @include('layouts.sidebar')
-                </v-list>
-            </v-navigation-drawer>
+            @include('layouts.sidebar')
             <v-app-bar app elevation=1>
                 @include('layouts.topBar')
             </v-app-bar>

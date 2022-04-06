@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,26 +15,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//auth()->logout();
-Route::get('/', function () {
-    return view('layouts.app');
-});
-
 Auth::routes();
 
 Route::get('/refresh_captcha', [App\Http\Controllers\auth\LoginController::class, 'refresh_captcha'])->name('refresh_captcha');
 Route::group(['middleware' => 'auth:web'], function () {
+    Route::get('/', [HomeController::class, 'index']);
     Route::resource('admin', AdminController::class);
 });
-//路由分組
-//Route::group(['prefix'=>'admin','namespace'=>'Admin'],function (){
-//
-//    //登入顯示 name給路由起一個別名
-//    Route::get('login','LoginController@index')->name('admin.login');
-//
-//    //登入方法 name給路由起一個別名
-//    Route::post('login','LoginController@login')->name('admin.login');
-//
-//    //定義圖形驗證碼路由
-//    Route::get('img_code','CommonController@imgCode')->name('admin.img_code');
-//});

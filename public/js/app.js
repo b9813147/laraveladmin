@@ -5464,7 +5464,7 @@ __webpack_require__.r(__webpack_exports__);
       };
       axios.post('login', form_data).then(function (response) {
         if (response.status === 204) {
-          window.location.replace('/admin');
+          window.location.replace('/');
         }
       })["catch"](function (error) {
         var result = error.response;
@@ -5762,8 +5762,7 @@ __webpack_require__.r(__webpack_exports__);
           identity: _.isObject(_this.editedItem.identity) ? _this.editedItem.identity.value : _this.editedItem.identity
         }; // 合併修改
 
-        var data = Object.assign({}, this.editedItem, obj);
-        console.log(data); // _this.$store.dispatch("updateLoading", true);
+        var data = Object.assign({}, this.editedItem, obj); // _this.$store.dispatch("updateLoading", true);
 
         axios.put(url, data).then(function (response) {
           if (response.status === 204) {
@@ -5777,24 +5776,22 @@ __webpack_require__.r(__webpack_exports__);
         // _this.$store.dispatch("updateLoading", true);
         // 新增 格式轉換
         var _obj = {
-          member_duty: this.editedItem.member_duty.value,
-          member_status: 1
+          identity: _.isObject(_this.editedItem.identity) ? _this.editedItem.identity.value : _this.editedItem.identity
         }; // 合併修改
 
         var _data = Object.assign({}, this.editedItem, _obj);
 
-        var _url = "/api/group/member"; // axios.post(url, data)
-        //     .then((response) => {
-        //         if (response.status === 201 || response.status === 200) {
-        //             this.initialize()
-        //             _this.$store.dispatch("updateLoading", false);
-        //             return this.close()
-        //         }
-        //     }).catch((error) => {
-        //     _this.error = error.response.data.message;
-        //     _this.$store.dispatch("updateLoading", false);
-        //
-        // });
+        var _url = "/admin";
+        axios.post(_url, _data).then(function (response) {
+          if (response.status === 200) {
+            _this3.resources.push(response.data); // _this.$store.dispatch("updateLoading", false);
+
+
+            return _this3.close();
+          }
+        })["catch"](function (error) {
+          _this.error = error.response.data.message; // _this.$store.dispatch("updateLoading", false);
+        });
       }
     }
   },
