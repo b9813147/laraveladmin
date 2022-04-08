@@ -5,6 +5,7 @@ import vuetify from './plugins/vuetify';
 
 Vue.component('login-component', require('./components/Login').default);
 Vue.component('user-component', require('./components/admin/User').default);
+Vue.component('reset-password-component', require('./components/ResetPasswordComponent').default);
 
 const app = new Vue({
     el     : '#app',
@@ -73,7 +74,7 @@ const app = new Vue({
         ]
         this.userMenus = [
             {icon: 'bubble_chart', title: this.$t('common.logout'), link: 'logout'},
-            {icon: 'bubble_chart', title: this.$t('common.reset_password'), link: 'changepassword'}
+            {icon: 'bubble_chart', title: this.$t('common.reset_password'), link: 'forget/password'}
         ];
     }
 

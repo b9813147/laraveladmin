@@ -5485,6 +5485,119 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/ResetPasswordComponent.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/ResetPasswordComponent.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: ['user'],
+  data: function data() {
+    return {
+      email: this.email,
+      loading: false,
+      done: false,
+      password: '',
+      passwordConfirmation: '',
+      valid: false
+    };
+  },
+  computed: {
+    showResetPassword: {
+      get: function get() {
+        return this.internalAction && this.internalAction === 'reset_password';
+      },
+      set: function set(value) {
+        if (value) this.internalAction = 'reset_password';else this.internalAction = null;
+      }
+    }
+  },
+  methods: {
+    reset: function reset() {
+      var user = {
+        'password': this.password,
+        'password_confirmation': this.passwordConfirmation
+      }; // this.loading = true
+      // this.$store.dispatch(actions.RESET_PASSWORD, user).then(response => {
+      //   this.loading = false
+      //   this.done = true
+      //   sleep(4000).then(() => {
+      //     this.showResetPassword = false
+      //     window.location = '/home'
+      //   })
+      // }).catch(error => {
+      //   if (error.response && error.response.status === 422) {
+      //     this.showError({
+      //       message: 'Invalid data'
+      //     })
+      //   } else {
+      //     this.showError(error)
+      //   }
+      //   this.errors = error.response.data.errors
+      // }).then(() => {
+      //   this.loading = false
+      // })
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/User.vue?vue&type=script&lang=js&":
 /*!*****************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/User.vue?vue&type=script&lang=js& ***!
@@ -5576,18 +5689,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['users'],
   data: function data() {
@@ -5599,20 +5700,19 @@ __webpack_require__.r(__webpack_exports__);
       identities: [],
       resources: [],
       stats: [],
+      status: [],
       editedIndex: -1,
       editedItem: {
         id: null,
         name: null,
         identity: null,
-        password: null // userId : null
-
+        status: null
       },
       defaultItem: {
         id: null,
         name: null,
         identity: null,
-        password: null // userId : null
-
+        status: null
       },
       success: [],
       error: [],
@@ -5621,73 +5721,17 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     formTitle: function formTitle() {
-      return this.editedIndex === -1 ? this.$t('users.create') : this.$t('users.edit'); // return this.editedIndex === -1 ? '新增使用者' : '編輯使用者'
+      return this.editedIndex === -1 ? this.$t('users.create') : this.$t('users.edit');
     }
   },
   watch: {
     dialog: function dialog(val) {
       val || this.close();
-    } // 'editedItem.habook'() {
-    //     let url = `/api/group/user/exist/`;
-    //     axios.get(url, {
-    //         params: {
-    //             group_id: this.editedItem.groupId, habook: this.editedItem.habook
-    //         }
-    //     }).then(response => {
-    //         console.log(response.data);
-    //         let result = response.data
-    //         // this.error = result.status === 200 ? [] : result.status === 404 ? [result.message + this.$t('validate.user_not_exist')] : [result.message + this.$t('validate.user_exist')];
-    //         // this.error = result.message;
-    //         this.success = result.message;
-    //         // this.success = result.status === 200 ? [result.message + this.$t('validate.add_success')] : '';
-    // this.validation();
-    //     })
-    // },
-    // 'editedItem.member_status'() {
-    //     this.validation();
-    // },
-    // 'editedItem.member_duty'() {
-    //     this.validation();
-    // },
-
+    }
   },
   created: function created() {// this.initialize()
   },
   methods: {
-    // 這裡需要傳入頻道ID
-    // initialize() {
-    //     let groupId = this.$store.state.Auth.user.group_id;
-    //     let groupUserUrl = `/api/group/${groupId}`;
-    //     let _this = this;
-    //
-    //     // _this.$store.dispatch("updateLoading", true);
-    //     axios.get(groupUserUrl).then((response) => {
-    //         // 預設值
-    //         _this.defaultItem.group_name = response.data.name;
-    //         // _this.defaultItem.groupId = this.$store.state.Auth.user.group_id;
-    //         // _this.editedItem.groupId = this.$store.state.Auth.user.group_id;
-    //
-    //         // 取回來的資料
-    //         _this.resources = response.data.users.map(v => {
-    //             return {
-    //                 // name       : `${v.name}(${v.habook})`,
-    //                 // habook     : v.habook,
-    //                 // member_duty: (v.pivot.member_duty === 'Admin')
-    //                 //              ? {text: this.$t('admin'), value: 'Admin'} : (v.pivot.member_duty === 'Expert')
-    //                 //                                                           ? {text: this.$t('expert'), value: 'Expert'} : {text: this.$t('general'), value: 'General'},
-    //                 // // member_status: (v.pivot.member_status === 1) ? {text: this.$t('enable'), value: 1} : {text: this.$t('disable'), value: 0},
-    //                 // userId    : v.pivot.user_id,
-    //                 // groupId   : response.data.id,
-    //                 // created_at: v.created_at,
-    //             }
-    //         });
-    //         _this.$store.dispatch("updateLoading", false);
-    //     }).catch((error) => {
-    //         console.log(error)
-    //     });
-    //
-    //     _this.defaultColumns();
-    // },
     defaultColumns: function defaultColumns() {
       var harder = [{
         text: this.$t('users.name'),
@@ -5702,6 +5746,10 @@ __webpack_require__.r(__webpack_exports__);
         value: 'email',
         sortable: true
       }, {
+        text: this.$t('users.status'),
+        value: 'status',
+        sortable: true
+      }, {
         text: this.$t('common.action'),
         value: 'action',
         sortable: false
@@ -5713,7 +5761,15 @@ __webpack_require__.r(__webpack_exports__);
         text: this.$t('users.general'),
         value: 2
       }];
+      var status = [{
+        text: this.$t('common.enable'),
+        value: 1
+      }, {
+        text: this.$t('common.disable'),
+        value: 0
+      }];
       this.headers = harder;
+      this.status = status;
       this.identities = identities;
     },
     editItem: function editItem(item) {
@@ -5721,24 +5777,17 @@ __webpack_require__.r(__webpack_exports__);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
-    deleteItem: function deleteItem(item) {
-      var _this = this;
-
-      var url = "/api/group/member/".concat(item.userId);
-
-      var index = _this.resources.indexOf(item);
-
-      if (confirm('Are you sure you want to delete this item?')) {
-        _this.resources.splice(index, 1);
-
-        _this.$store.dispatch("updateLoading", true);
-
-        axios["delete"](url, {
-          data: item
-        }).then(function (response) {
-          _this.$store.dispatch("updateLoading", false);
-        });
-      }
+    deleteItem: function deleteItem(item) {// let _this = this;
+      // let url = `/api/group/member/${item.userId}`;
+      // const index = _this.resources.indexOf(item);
+      //
+      // if (confirm('Are you sure you want to delete this item?')) {
+      //     _this.resources.splice(index, 1);
+      //     _this.$store.dispatch("updateLoading", true);
+      //     axios.delete(url, {data: item}).then((response) => {
+      //         _this.$store.dispatch("updateLoading", false);
+      //     })
+      // }
     },
     close: function close() {
       var _this2 = this;
@@ -5753,36 +5802,31 @@ __webpack_require__.r(__webpack_exports__);
     save: function save() {
       var _this3 = this;
 
-      var _this = this;
+      // _this.$store.dispatch("updateLoading", true);
+      var _this = this; // format conversion
+
+
+      var obj = {
+        identity: _.isObject(_this.editedItem.identity) ? _this.editedItem.identity.value : _this.editedItem.identity,
+        status: _.isObject(_this.editedItem.status) ? _this.editedItem.status.value : _this.editedItem.status
+      }; // merger
+
+      var result = Object.assign({}, this.editedItem, obj);
 
       if (this.editedIndex > -1) {
-        var url = "/admin/".concat(_this.editedItem.id); // 格式轉換
+        var url = "/admin/".concat(_this.editedItem.id);
+        axios.patch(url, result).then(function (response) {
+          console.log(response.status);
 
-        var obj = {
-          identity: _.isObject(_this.editedItem.identity) ? _this.editedItem.identity.value : _this.editedItem.identity
-        }; // 合併修改
-
-        var data = Object.assign({}, this.editedItem, obj); // _this.$store.dispatch("updateLoading", true);
-
-        axios.put(url, data).then(function (response) {
           if (response.status === 204) {
             // _this.$store.dispatch("updateLoading", false);
-            Object.assign(_this3.resources[_this3.editedIndex], _this3.editedItem); // _this.$store.dispatch("updateAlert", true);
-
+            Object.assign(_this3.resources[_this3.editedIndex], result);
             return _this3.close();
           }
         });
       } else {
-        // _this.$store.dispatch("updateLoading", true);
-        // 新增 格式轉換
-        var _obj = {
-          identity: _.isObject(_this.editedItem.identity) ? _this.editedItem.identity.value : _this.editedItem.identity
-        }; // 合併修改
-
-        var _data = Object.assign({}, this.editedItem, _obj);
-
         var _url = "/admin";
-        axios.post(_url, _data).then(function (response) {
+        axios.post(_url, result).then(function (response) {
           if (response.status === 200) {
             _this3.resources.push(response.data); // _this.$store.dispatch("updateLoading", false);
 
@@ -5832,6 +5876,7 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 vue__WEBPACK_IMPORTED_MODULE_3__["default"].component('login-component', (__webpack_require__(/*! ./components/Login */ "./resources/js/components/Login.vue")["default"]));
 vue__WEBPACK_IMPORTED_MODULE_3__["default"].component('user-component', (__webpack_require__(/*! ./components/admin/User */ "./resources/js/components/admin/User.vue")["default"]));
+vue__WEBPACK_IMPORTED_MODULE_3__["default"].component('reset-password-component', (__webpack_require__(/*! ./components/ResetPasswordComponent */ "./resources/js/components/ResetPasswordComponent.vue")["default"]));
 var app = new vue__WEBPACK_IMPORTED_MODULE_3__["default"]({
   el: '#app',
   vuetify: _plugins_vuetify__WEBPACK_IMPORTED_MODULE_2__["default"],
@@ -5943,7 +5988,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_3__["default"]({
     }, {
       icon: 'bubble_chart',
       title: this.$t('common.reset_password'),
-      link: 'changepassword'
+      link: 'forget/password'
     }];
   }
 }); // window.vue = app;
@@ -6006,23 +6051,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   common: {
-    'cancel': 'cancel',
-    'submit': 'submit',
-    'action': 'action',
-    'password': 'password',
+    'cancel': 'Cancel',
+    'submit': 'Submit',
+    'action': 'Action',
+    'password': 'Password',
     'rows_per_page': 'Rows per page',
-    'all': 'All'
+    'all': 'All',
+    'enable': 'Enable',
+    'disable': 'Disable'
   },
   users: {
-    'manage': 'manage',
-    'edit': 'edit',
-    'create': 'create',
-    'delete': 'delete',
-    'identity': 'identity',
-    'email': 'email',
-    'name': 'name',
-    'admin': 'admin',
-    'general': 'general'
+    'manage': 'Manage',
+    'edit': 'Edit',
+    'create': 'Create',
+    'delete': 'Delete',
+    'identity': 'Identity',
+    'email': 'Email',
+    'name': 'Name',
+    'status': 'Status',
+    'admin': 'Admin',
+    'general': 'General'
   }
 });
 
@@ -6098,7 +6146,9 @@ __webpack_require__.r(__webpack_exports__);
     'logout': '登出',
     'reset_password': '更改密碼',
     'rows_per_page': '每頁行數',
-    'all': '全部'
+    'all': '全部',
+    'enable': '啟用',
+    'disable': '停用'
   },
   users: {
     'manage': '人員管理',
@@ -6106,6 +6156,7 @@ __webpack_require__.r(__webpack_exports__);
     'create': '新增人員',
     'delete': '刪除人員',
     'identity': '身份',
+    'status': '狀態',
     'email': '信箱',
     'name': '名稱',
     'admin': '管理員',
@@ -32415,6 +32466,45 @@ component.options.__file = "resources/js/components/Login.vue"
 
 /***/ }),
 
+/***/ "./resources/js/components/ResetPasswordComponent.vue":
+/*!************************************************************!*\
+  !*** ./resources/js/components/ResetPasswordComponent.vue ***!
+  \************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _ResetPasswordComponent_vue_vue_type_template_id_277b31be_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ResetPasswordComponent.vue?vue&type=template&id=277b31be&scoped=true& */ "./resources/js/components/ResetPasswordComponent.vue?vue&type=template&id=277b31be&scoped=true&");
+/* harmony import */ var _ResetPasswordComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ResetPasswordComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/ResetPasswordComponent.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _ResetPasswordComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ResetPasswordComponent_vue_vue_type_template_id_277b31be_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
+  _ResetPasswordComponent_vue_vue_type_template_id_277b31be_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  "277b31be",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/ResetPasswordComponent.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/admin/User.vue":
 /*!************************************************!*\
   !*** ./resources/js/components/admin/User.vue ***!
@@ -32470,6 +32560,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/ResetPasswordComponent.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************!*\
+  !*** ./resources/js/components/ResetPasswordComponent.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ResetPasswordComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ResetPasswordComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/ResetPasswordComponent.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ResetPasswordComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
 /***/ "./resources/js/components/admin/User.vue?vue&type=script&lang=js&":
 /*!*************************************************************************!*\
   !*** ./resources/js/components/admin/User.vue?vue&type=script&lang=js& ***!
@@ -32499,6 +32605,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Login_vue_vue_type_template_id_6bdc8b8e_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Login_vue_vue_type_template_id_6bdc8b8e_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Login.vue?vue&type=template&id=6bdc8b8e&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Login.vue?vue&type=template&id=6bdc8b8e&scoped=true&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/ResetPasswordComponent.vue?vue&type=template&id=277b31be&scoped=true&":
+/*!*******************************************************************************************************!*\
+  !*** ./resources/js/components/ResetPasswordComponent.vue?vue&type=template&id=277b31be&scoped=true& ***!
+  \*******************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ResetPasswordComponent_vue_vue_type_template_id_277b31be_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ResetPasswordComponent_vue_vue_type_template_id_277b31be_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ResetPasswordComponent_vue_vue_type_template_id_277b31be_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ResetPasswordComponent.vue?vue&type=template&id=277b31be&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/ResetPasswordComponent.vue?vue&type=template&id=277b31be&scoped=true&");
 
 
 /***/ }),
@@ -32710,6 +32833,139 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/ResetPasswordComponent.vue?vue&type=template&id=277b31be&scoped=true&":
+/*!**********************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/ResetPasswordComponent.vue?vue&type=template&id=277b31be&scoped=true& ***!
+  \**********************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-card",
+    [
+      _c("v-card-title", [
+        _c("span", { staticClass: "headline" }, [_vm._v("重設密碼")]),
+      ]),
+      _vm._v(" "),
+      _c(
+        "v-card-text",
+        [
+          _c(
+            "v-form",
+            {
+              model: {
+                value: _vm.valid,
+                callback: function ($$v) {
+                  _vm.valid = $$v
+                },
+                expression: "valid",
+              },
+            },
+            [
+              _c("v-text-field", {
+                attrs: { label: "Email", required: "" },
+                model: {
+                  value: _vm.email,
+                  callback: function ($$v) {
+                    _vm.email = $$v
+                  },
+                  expression: "email",
+                },
+              }),
+              _vm._v(" "),
+              _c("v-text-field", {
+                attrs: {
+                  name: "password",
+                  label: "Password",
+                  hint: "至少 6 個字符",
+                  min: "6",
+                  type: "password",
+                  required: "",
+                },
+                model: {
+                  value: _vm.password,
+                  callback: function ($$v) {
+                    _vm.password = $$v
+                  },
+                  expression: "password",
+                },
+              }),
+              _vm._v(" "),
+              _c("v-text-field", {
+                attrs: {
+                  name: "passwordConfirmation",
+                  label: "Password confirmation",
+                  hint: "至少 6 個字符",
+                  min: "6",
+                  type: "password",
+                  required: "",
+                },
+                model: {
+                  value: _vm.passwordConfirmation,
+                  callback: function ($$v) {
+                    _vm.passwordConfirmation = $$v
+                  },
+                  expression: "passwordConfirmation",
+                },
+              }),
+            ],
+            1
+          ),
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-card-actions",
+        [
+          _c("v-spacer"),
+          _vm._v(" "),
+          _c("v-btn", { attrs: { color: "blue darken-1" } }, [_vm._v("Close")]),
+          _vm._v(" "),
+          _c(
+            "v-btn",
+            {
+              attrs: {
+                loading: _vm.loading,
+                flat: "",
+                color: _vm.done ? "green" : "blue",
+              },
+              nativeOn: {
+                click: function ($event) {
+                  return _vm.reset.apply(null, arguments)
+                },
+              },
+            },
+            [
+              _vm.done ? _c("v-icon", [_vm._v("done")]) : _vm._e(),
+              _vm._v("\n             \n            "),
+              !_vm.done ? [_vm._v("Reset")] : [_vm._v("Done")],
+            ],
+            2
+          ),
+        ],
+        1
+      ),
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/User.vue?vue&type=template&id=041af9b6&":
 /*!**********************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/admin/User.vue?vue&type=template&id=041af9b6& ***!
@@ -32905,39 +33161,6 @@ var render = function () {
                                             },
                                           },
                                           [
-                                            _c("v-text-field", {
-                                              attrs: {
-                                                label:
-                                                  _vm.$t("common.password"),
-                                                type: "password",
-                                              },
-                                              model: {
-                                                value: _vm.editedItem.password,
-                                                callback: function ($$v) {
-                                                  _vm.$set(
-                                                    _vm.editedItem,
-                                                    "password",
-                                                    $$v
-                                                  )
-                                                },
-                                                expression:
-                                                  "editedItem.password",
-                                              },
-                                            }),
-                                          ],
-                                          1
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "v-col",
-                                          {
-                                            attrs: {
-                                              cols: "12",
-                                              sm: "6",
-                                              md: "6",
-                                            },
-                                          },
-                                          [
                                             _c("v-select", {
                                               attrs: {
                                                 items: _vm.identities,
@@ -32958,6 +33181,41 @@ var render = function () {
                                                 },
                                                 expression:
                                                   "editedItem.identity",
+                                              },
+                                            }),
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-col",
+                                          {
+                                            attrs: {
+                                              cols: "12",
+                                              sm: "6",
+                                              md: "6",
+                                            },
+                                          },
+                                          [
+                                            _c("v-select", {
+                                              attrs: {
+                                                items: _vm.status,
+                                                "item-text": "text",
+                                                "item-value": "value",
+                                                label: _vm.$t("users.status"),
+                                                "return-object": "",
+                                                required: "",
+                                              },
+                                              model: {
+                                                value: _vm.editedItem.status,
+                                                callback: function ($$v) {
+                                                  _vm.$set(
+                                                    _vm.editedItem,
+                                                    "status",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression: "editedItem.status",
                                               },
                                             }),
                                           ],
@@ -33029,19 +33287,40 @@ var render = function () {
                   },
                   [_vm._v("edit")]
                 ),
-                _vm._v(" "),
-                _c(
-                  "v-icon",
-                  {
-                    attrs: { small: "" },
-                    on: {
-                      click: function ($event) {
-                        return _vm.deleteItem(item)
-                      },
-                    },
-                  },
-                  [_vm._v("delete")]
-                ),
+              ]
+            },
+          },
+          {
+            key: "item.identity",
+            fn: function (ref) {
+              var item = ref.item
+              return [
+                _c("pre", [
+                  _vm._v(
+                    _vm._s(
+                      _vm.identities.find(function (v) {
+                        return v.value === item.identity
+                      }).text
+                    )
+                  ),
+                ]),
+              ]
+            },
+          },
+          {
+            key: "item.status",
+            fn: function (ref) {
+              var item = ref.item
+              return [
+                _c("pre", [
+                  _vm._v(
+                    _vm._s(
+                      _vm.status.find(function (v) {
+                        return v.value === item.status
+                      }).text
+                    )
+                  ),
+                ]),
               ]
             },
           },

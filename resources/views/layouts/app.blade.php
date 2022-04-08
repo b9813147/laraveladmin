@@ -12,12 +12,12 @@
 <body>
 <div id="app">
     <v-app id="inspire">
-        @if(auth()->check())
+        @auth()
             @include('layouts.sidebar')
             <v-app-bar app elevation=1>
                 @include('layouts.topBar')
             </v-app-bar>
-        @endif
+        @endauth
         <v-main>
             <v-container fluid>
                 <v-row align="center" justify="center">

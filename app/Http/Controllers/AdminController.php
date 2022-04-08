@@ -47,8 +47,8 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        $only             = $request->only('email', 'name', 'identity', 'password');
-        $only['password'] = Hash::make($only['password']);
+        $only             = $request->only('email', 'name', 'identity', 'status');
+        $only['password'] = Hash::make($only['email']);
 
         try {
             $result = $this->userService->create($only);
@@ -90,8 +90,8 @@ class AdminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $only             = $request->only('email', 'password', 'name', 'identity');
-        $only['password'] = Hash::make($only['password']);
+        $only = $request->only('email', 'name', 'identity', 'status');
+//        $only['password'] = Hash::make($only['password']);
 
         try {
             $this->userService->update($id, $only);

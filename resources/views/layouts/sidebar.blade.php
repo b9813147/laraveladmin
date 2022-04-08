@@ -29,16 +29,18 @@
         </v-list-item>
     </v-list>
 
-    <v-list>
-        <v-list-item v-for="item in appMenus" :key="item.text" link :href="item.href">
-            <v-list-item-action>
-                <v-icon>@{{ item.icon }}</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-                <v-list-item-title>@{{ item.text }}</v-list-item-title>
-            </v-list-item-content>
-        </v-list-item>
-    </v-list>
+    @if(auth()->user()->identity ===1)
+        <v-list>
+            <v-list-item v-for="item in appMenus" :key="item.text" link :href="item.href">
+                <v-list-item-action>
+                    <v-icon>@{{ item.icon }}</v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                    <v-list-item-title>@{{ item.text }}</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+        </v-list>
+@endif
 {{--        <v-list-item link to="/group/channel">--}}
 {{--            <v-list-item-action>--}}
 {{--                <v-icon>mdi-library-video</v-icon>--}}
