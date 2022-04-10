@@ -2,15 +2,19 @@ require('./bootstrap');
 import Vue     from "vue";
 import i18n    from './lang/index'
 import vuetify from './plugins/vuetify';
+import store   from './store/index'
 
-Vue.component('login-component', require('./components/Login').default);
-Vue.component('user-component', require('./components/admin/User').default);
-Vue.component('reset-password-component', require('./components/ResetPasswordComponent').default);
+Vue.component('LoginComponent', require('./components/LoginComponent').default);
+Vue.component('UserComponent', require('./components/admin/UserComponent').default);
+Vue.component('EmailComponent', require('./components/EmailComponent').default);
+Vue.component('ResetPasswordComponent', require('./components/ResetPasswordComponent').default);
 
 const app = new Vue({
-    el     : '#app',
+    el: '#app',
     vuetify,
     i18n,
+    store,
+
     data   : () => ({
         drawer          : null,
         drawerRight     : false,
@@ -27,7 +31,7 @@ const app = new Vue({
             // this.menuItem = item.title;
             console.log(item)
             if (item.link === 'logout') {
-                await axios.post('logout')
+                await axios.post('/logout')
                     .then((response) => {
                         if (response.status === 204) {
                             window.location.replace('login');
@@ -38,35 +42,36 @@ const app = new Vue({
                         console.log(error.response);
                     })
             }
+            return window.location.replace(item.link);
         },
-        setLang(lang) {
-            // 設定後端語系
-            axios.get('/api/lang/setLocal', {
-                params: {
-                    lang: lang
-                }
-            }).then((resource) => {
-                if (resource.status === 200) {
-                    localStorage.setItem('local', lang);
-                }
-            });
-            return window.location = location.pathname;
-        },
-        async getLang() {
-            await axios.get('/api/lang/getLocal')
-                .then((resource) => {
-                    if (resource.status === 200) {
-                        localStorage.setItem('local', resource.data.lang)
-                        return this.$i18n.locale = resource.data.lang
-                    }
-                });
-        }
+        // setLang(lang) {
+        //     // 設定後端語系
+        //     axios.get('/api/lang/setLocal', {
+        //         params: {
+        //             lang: lang
+        //         }
+        //     }).then((resource) => {
+        //         if (resource.status === 200) {
+        //             localStorage.setItem('local', lang);
+        //         }
+        //     });
+        //     return window.location = location.pathname;
+        // },
+        // async getLang() {
+        //     await axios.get('/api/lang/getLocal')
+        //         .then((resource) => {
+        //             if (resource.status === 200) {
+        //                 localStorage.setItem('local', resource.data.lang)
+        //                 return this.$i18n.locale = resource.data.lang
+        //             }
+        //         });
+        // }
     },
     mounted() {
         this.appMenus = [
             // {icon: 'mdi-view-dashboard', text: '儀表版', href: '/'},
             // {icon: 'mdi-cogs', text: '系統設定', href: '/Settings'},
-            {icon: 'mdi-account', text: this.$t('users.manage'), href: 'admin'},
+            {icon: 'mdi-account', text: this.$t('users.manage'), href: '/admin'},
         ];
         this.langs = [
             {text: '繁體', value: 'zh-TW'},
@@ -74,7 +79,7 @@ const app = new Vue({
         ]
         this.userMenus = [
             {icon: 'bubble_chart', title: this.$t('common.logout'), link: 'logout'},
-            {icon: 'bubble_chart', title: this.$t('common.reset_password'), link: 'forget/password'}
+            {icon: 'bubble_chart', title: this.$t('common.reset_password'), link: '/password/reset'}
         ];
     }
 

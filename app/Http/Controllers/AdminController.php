@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AdminRequest;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -42,12 +43,12 @@ class AdminController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param AdminRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(AdminRequest $request)
     {
-        $only             = $request->only('email', 'name', 'identity', 'status');
+        $only             = $request->only('email', 'name', 'identity', 'is_active');
         $only['password'] = Hash::make($only['email']);
 
         try {
@@ -84,14 +85,14 @@ class AdminController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param AdminRequest $request
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(AdminRequest $request, $id)
     {
-        $only = $request->only('email', 'name', 'identity', 'status');
-//        $only['password'] = Hash::make($only['password']);
+        $only = $request->only('email', 'name', 'identity', 'is_active');
+//        dd($only);
 
         try {
             $this->userService->update($id, $only);

@@ -1,103 +1,98 @@
 <template>
-    <v-card>
-        <v-card-title>
-            <span class="headline">重設密碼</span>
-        </v-card-title>
-        <v-card-text>
-            <v-form v-model="valid">
-                <v-text-field
-                    label="Email"
-                    v-model="email"
-                    required
-                ></v-text-field>
-                <v-text-field
-                    name="password"
-                    label="Password"
-                    v-model="password"
-                    hint="至少 6 個字符"
-                    min="6"
-                    type="password"
-                    required
-                ></v-text-field>
-                <v-text-field
-                    name="passwordConfirmation"
-                    label="Password confirmation"
-                    v-model="passwordConfirmation"
-                    hint="至少 6 個字符"
-                    min="6"
-                    type="password"
-                    required
-                ></v-text-field>
-            </v-form>
-        </v-card-text>
-        <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1">Close</v-btn>
-            <v-btn
-                :loading="loading"
-                flat
-                :color="done ? 'green' : 'blue'"
-                @click.native="reset"
-            >
-                <v-icon v-if="done">done</v-icon>
-                &nbsp;
-                <template v-if="!done">Reset</template>
-                <template v-else>Done</template>
-            </v-btn>
-        </v-card-actions>
-    </v-card>
+    <v-container fluid fill-height>
+        <v-row justify="center">
+            <v-col xs="12" sm="12" md="6" lg="6" xl="6">
+                <v-card>
+                    <v-toolbar dark color="primary">
+                        <v-toolbar-title>重置密碼</v-toolbar-title>
+                    </v-toolbar>
+                    <v-card-text>
+                        <v-form @submit.prevent="onSubmit">
+                            <v-text-field
+                                label="信箱"
+                                type="text"
+                                disabled
+                                v-model="email"
+                            >
+                                <v-icon slot="append">mdi-email</v-icon>
+                            </v-text-field>
+                            <v-text-field
+                                label="密碼"
+                                type="password"
+                                v-model="password"
+                                :error-messages="errors"
+                                :success-messages="success"
+                                required
+                            >
+                                <v-icon slot="append">mdi-lock</v-icon>
+                            </v-text-field>
+                            <v-text-field
+                                label="確認密碼"
+                                type="password"
+                                v-model="password_confirmation"
+                                :error-messages="errors"
+                                :success-messages="success"
+                                required
+                            >
+                                <v-icon slot="append">mdi-lock</v-icon>
+                            </v-text-field>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn @click="onSubmit" @keydown.enter :loading="this.$store.state.Status.isLoading">送出</v-btn>
+                            </v-card-actions>
+                        </v-form>
+                    </v-card-text>
+                </v-card>
+            </v-col>
+        </v-row>
+    </v-container>
+
 </template>
+
 <script>
 export default {
-    props: ['user'],
+    props: ['token', 'email'],
+    name : "Reset",
     data() {
         return {
-            email               : this.email,
-            loading             : false,
-            done                : false,
-            password            : '',
-            passwordConfirmation: '',
-            valid               : false
+            password             : '',
+            password_confirmation: '',
+            errors               : [],
+            success              : [],
         }
     },
-    computed: {
-        showResetPassword: {
-            get() {
-                return this.internalAction && (this.internalAction === 'reset_password')
-            },
-            set(value) {
-                if (value) this.internalAction = 'reset_password'
-                else this.internalAction = null
-            }
-        }
-    },
-    methods : {
-        reset() {
-            const user = {
+
+    methods: {
+        onSubmit() {
+            this.$store.dispatch("updateLoading", true);
+            let result = {
+                'token'                : this.token,
+                'email'                : this.email,
                 'password'             : this.password,
-                'password_confirmation': this.passwordConfirmation,
+                'password_confirmation': this.password_confirmation
             }
-            // this.loading = true
-            // this.$store.dispatch(actions.RESET_PASSWORD, user).then(response => {
-            //   this.loading = false
-            //   this.done = true
-            //   sleep(4000).then(() => {
-            //     this.showResetPassword = false
-            //     window.location = '/home'
-            //   })
-            // }).catch(error => {
-            //   if (error.response && error.response.status === 422) {
-            //     this.showError({
-            //       message: 'Invalid data'
-            //     })
-            //   } else {
-            //     this.showError(error)
-            //   }
-            //   this.errors = error.response.data.errors
-            // }).then(() => {
-            //   this.loading = false
-            // })
+            axios.post('/password/reset', result)
+                .then((response) => {
+                    if (response.status === 200) {
+                        this.success = response.data.message;
+                        window.location.replace('/');
+                        this.errors = [];
+                        this.$store.dispatch("updateLoading", false);
+
+                    }
+                })
+                .catch((error) => {
+                    let response = error.response;
+                    if (response.status === 422) {
+                        this.errors = response.data.message;
+                        this.success = [];
+                        this.$store.dispatch("updateLoading", false);
+                    }
+                })
         }
+    },
+    mounted() {
+        // this.email = this.email;
     }
 }
 </script>

@@ -45,7 +45,8 @@
                         </v-card-text>
                         <v-card-actions>
                             <v-spacer></v-spacer>
-                            <v-btn color="primary" @click="login" @keydown.enter>Login</v-btn>
+                            <v-btn color="primary" @click="login" @keydown.enter :loading="this.$store.state.Status.isLoading">登入</v-btn>
+                            <v-btn color="primary" @click="forgetPassword">忘記密碼</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-col>
@@ -63,7 +64,7 @@ export default {
             email         : '',
             password      : '',
             captcha       : '',
-            errors_message: {}
+            errors_message: {},
 
         }
     },
@@ -75,6 +76,7 @@ export default {
         },
 
         login() {
+            this.$store.dispatch("updateLoading", true);
             let form_data = {
                 password: this.password,
                 email   : this.email,
@@ -84,6 +86,7 @@ export default {
                 .then((response) => {
                     if (response.status === 204) {
                         window.location.replace('/');
+                        this.$store.dispatch("updateLoading", false);
                     }
                 })
                 .catch((error) => {
@@ -91,11 +94,13 @@ export default {
                     this.errors_message = result.data.errors
                     if (result.status === 422) {
                         this.refresh_captcha();
-                        console.log(1)
+                        this.$store.dispatch("updateLoading", false);
                     }
-
                 })
         },
+        forgetPassword() {
+            return window.location.replace('/password/reset')
+        }
     },
     mounted() {
         this.refresh_captcha();

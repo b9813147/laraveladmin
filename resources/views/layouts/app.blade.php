@@ -34,7 +34,7 @@
     </v-app>
 </div>
 @stack('beforeScripts')
-<script src="{{ mix('js/app.js') }}"></script>
+@include('layouts.script')
 @stack('afterScripts')
 </body>
 </html>

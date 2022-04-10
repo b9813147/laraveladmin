@@ -19,7 +19,7 @@ if (!localStorage.getItem('local')) {
     }
 }
 
-console.log(localStorage.getItem('local'));
+// console.log(localStorage.getItem('local'));
 
 /*todo 自動偵測多語系 */
 const messages = {

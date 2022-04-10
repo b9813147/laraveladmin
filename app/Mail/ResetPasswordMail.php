@@ -6,23 +6,21 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use function Symfony\Component\Translation\t;
 
-class SendPasswordMail extends Mailable
+class ResetPasswordMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    protected $token;
-
+    protected $url;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($token)
+    public function __construct($url)
     {
-        $this->token = $token;
+        $this->url = $url;
     }
 
     /**
@@ -32,7 +30,9 @@ class SendPasswordMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('This is Testing Mail')
-            ->markdown('auth.passwords.passwordEmail', ['token' => $this->token]);
+        return $this->from('LiTv@exaple.com', 'LiTv')
+            ->subject('重置密碼')
+            ->markdown('mails.reset_password')
+            ->with(['url' => $this->url]);
     }
 }
