@@ -28,8 +28,8 @@ class UserFactory extends Factory
         return [
             'name'              => 'steven.su',
             'email'             => 'steven.su@tgc-taiwan.com.tw',
-            'status'            => '1',
-            'identity'          => '1',
+            'is_active'         => 1,
+            'identity'          => 1,
             'email_verified_at' => now(),
             'password'          => Hash::make('a12345'), // password
             'remember_token'    => Str::random(10),

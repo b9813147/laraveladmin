@@ -49,7 +49,7 @@ class AdminController extends Controller
     public function store(AdminRequest $request)
     {
         $only             = $request->only('email', 'name', 'identity', 'is_active');
-        $only['password'] = Hash::make($only['email']);
+        $only['password'] = Hash::make(\Str::random(10));
 
         try {
             $result = $this->userService->create($only);
@@ -92,7 +92,6 @@ class AdminController extends Controller
     public function update(AdminRequest $request, $id)
     {
         $only = $request->only('email', 'name', 'identity', 'is_active');
-//        dd($only);
 
         try {
             $this->userService->update($id, $only);
